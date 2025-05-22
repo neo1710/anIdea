@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../../.flowbite-react/class-list.json";
+
+ @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+ @keyframes float-1 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(100px, -50px) rotate(90deg); }
+          50% { transform: translate(200px, 0) rotate(180deg); }
+          75% { transform: translate(100px, 50px) rotate(270deg); }
+          100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        @keyframes float-2 {
+          0% { transform: translate(100vw, 10vh) rotate(0deg); }
+          50% { transform: translate(-100px, 50vh) rotate(180deg); }
+          100% { transform: translate(100vw, 90vh) rotate(360deg); }
+        }
+        
+        @keyframes float-3 {
+          0% { transform: translate(0, 100vh) rotate(0deg); }
+          50% { transform: translate(50vw, 0) rotate(180deg); }
+          100% { transform: translate(100vw, 100vh) rotate(360deg); }
+        }
+        
+        @keyframes float-4 {
+          0% { transform: translate(80vw, 0) rotate(0deg); }
+          25% { transform: translate(60vw, 25vh) rotate(90deg); }
+          50% { transform: translate(20vw, 50vh) rotate(180deg); }
+          75% { transform: translate(0, 75vh) rotate(270deg); }
+          100% { transform: translate(80vw, 0) rotate(360deg); }
+        }
+        
+        @keyframes float-5 {
+          0% { transform: translate(50vw, 100vh) rotate(0deg); }
+          33% { transform: translate(0, 60vh) rotate(120deg); }
+          66% { transform: translate(100vw, 30vh) rotate(240deg); }
+          100% { transform: translate(50vw, 100vh) rotate(360deg); }
+        }
+        
+        .animate-float-1 {
+          animation: float-1 20s linear infinite;
+          top: 20%;
+          left: 10%;
+        }
+        
+        .animate-float-2 {
+          animation: float-2 15s linear infinite;
+          top: 0;
+          left: 0;
+        }
+        
+        .animate-float-3 {
+          animation: float-3 25s linear infinite;
+          top: 0;
+          left: 0;
+        }
+        
+        .animate-float-4 {
+          animation: float-4 18s linear infinite;
+          top: 0;
+          left: 0;
+        }
+        
+        .animate-float-5 {
+          animation: float-5 22s linear infinite;
+          top: 0;
+          left: 0;
+        }
