@@ -1,3 +1,5 @@
+import PhotoSlider from "@/components/SliderComponent";
+import OrnamentsWelcome from "@/components/Welcome";
 
 
 
@@ -5,7 +7,9 @@ export default function Home() {
 
   return (
     <div className="">
-      <h1 className="text-[2rem]">Welcome to Ornaments</h1>
+<OrnamentsWelcome/>
+
+      <PhotoSlider/>
     </div>
   );
 }
