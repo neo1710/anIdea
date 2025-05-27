@@ -1,9 +1,11 @@
 "use client"
 import { useState, useEffect } from 'react';
+import { Contact } from './ContactEmailFom';
+import { ContactModal } from './ContactModal';
 
 export default function OrnamentsFooter() {
     const [isVisible, setIsVisible] = useState(false);
-
+    const [contactModalVisible, setContactModalVisible] = useState(false);
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -181,16 +183,13 @@ export default function OrnamentsFooter() {
                             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
                                 Get the latest updates on new clay creations, exclusive offers, and behind-the-scenes peeks at our crafting process!
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                                <input
-                                    type="email"
-                                    placeholder="Your email address"
-                                    className="flex-1 px-4 py-3 rounded-full border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent bg-white/80 backdrop-blur-sm"
-                                />
-                                <button className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                                    Subscribe ✨
-                                </button>
-                            </div>
+                            <button onClick={() => setContactModalVisible(true)}
+                                className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                                Send us an Email ✨
+                            </button>
+                            <ContactModal
+                                isModalOpen={contactModalVisible}
+                                setIsModalOpen={setContactModalVisible} />
                         </div>
                     </div>
                 </div>
