@@ -36,7 +36,7 @@ export default function EnhancedNavbar() {
               <Button
                 key={index}
                 onClick={() => router.push(item.navLink)}
-                className="group relative flex items-center gap-2 px-4 py-2 !bg-pink-500 hover:!bg-rose-600 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-md active:scale-95 overflow-hidden"
+                className="group focus:ring-0 relative flex items-center gap-2 px-4 py-2 !bg-pink-500 hover:!bg-rose-600 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-md active:scale-95 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <item.icon className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
@@ -51,7 +51,7 @@ export default function EnhancedNavbar() {
           <div className="md:hidden">
             <Button
               onClick={toggleMobileMenu}
-              className="p-2 !bg-pink-500 hover:!bg-rose-600 text-white rounded-lg transition-all duration-300 transform hover:scale-110 active:scale-95"
+              className="p-2 !bg-pink-500 focus:ring-0 hover:!bg-rose-600 text-white rounded-lg transition-all duration-300 transform hover:scale-110 active:scale-95"
             >
               {isMobileMenuOpen ? (
                 <FaTimes className="w-5 h-5 transform rotate-0 transition-transform duration-300" />
@@ -70,7 +70,8 @@ export default function EnhancedNavbar() {
             {navItems.map((item, index) => (
               <Button
                 key={index}
-                className="group w-full flex items-center gap-3 px-4 py-3 !bg-pink-500 hover:!bg-rose-600 text-white font-medium rounded-lg transition-all duration-300 transform hover:translate-x-2 hover:shadow-md active:scale-95"
+                onClick={() => router.push(item.navLink)}
+                className="group focus:ring-0 w-full flex items-center gap-3 px-4 py-3 !bg-pink-500 hover:!bg-rose-600 text-white font-medium rounded-lg transition-all duration-300 transform hover:translate-x-2 hover:shadow-md active:scale-95"
                 style={{
                   animationDelay: `${index * 100}ms`,
                   animation: isMobileMenuOpen ? 'slideInLeft 0.3s ease-out forwards' : 'none'
