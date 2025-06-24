@@ -93,7 +93,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange }) => {
 
       {/* Sidebar */}
       <div className={`
-        sm:sticky sm:block sm:translate-x-0 top-16 left-0 h-[630px] w-80 backdrop-blur-sm border-r border-pink-200 
+        sm:sticky sm:block sm:translate-x-0 top-16 left-0 h-[630px] sm:h-full sm:w-full w-80 backdrop-blur-sm border-r border-pink-200 
         shadow-xl lg:shadow-none z-10 transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0 fixed bg-white' : '-translate-x-full hidden'}
       `}>
