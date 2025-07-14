@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { setProducts, initialProducts } from "@/store/slices/conversationReducer";
 
 interface ExpandedSections {
   price: boolean;
@@ -23,13 +25,32 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange }) => {
     price: true,
     category: true
   });
+  const dispatch = useDispatch();
 
   const categories: string[] = [
     'Charms',
     'Keychains',
-    'Firdge Magnets',
+    'Fridge Magnets',
     'Necklaces',
   ];
+
+  // Helper to filter products
+  const filterProducts = () => {
+    let filtered = initialProducts; // Always use initialProducts
+    // Filter by price
+    filtered = filtered.filter(product =>
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+    // Filter by category (title)
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedCategories.some(cat =>
+          product.title.toLowerCase().includes(cat.toLowerCase())
+        )
+      );
+    }
+    return filtered;
+  };
 
   const toggleSection = (section: keyof ExpandedSections): void => {
     setExpandedSections(prev => ({
@@ -49,6 +70,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange }) => {
   const clearFilters = (): void => {
     setPriceRange([0, 1000]);
     setSelectedCategories([]);
+    dispatch(setProducts(initialProducts)); // Reset to initial product data
     if (onFiltersChange) {
       onFiltersChange({
         priceRange: [0, 1000],
@@ -64,6 +86,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange }) => {
   };
 
   const applyFilters = (): void => {
+    const filtered = filterProducts();
+    dispatch(setProducts(filtered));
     if (onFiltersChange) {
       onFiltersChange({
         priceRange,
@@ -93,7 +117,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange }) => {
 
       {/* Sidebar */}
       <div className={`
-        sm:sticky sm:block sm:translate-x-0 top-16 left-0 h-[630px] sm:h-full sm:w-full w-80 backdrop-blur-sm border-r border-pink-200 
+        sm:sticky sm:block sm:translate-x-0 top-16 left-0 w-[300px] sm:w-[400px] h-[630px] border-r border-pink-200 
         shadow-xl lg:shadow-none z-10 transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0 fixed bg-white' : '-translate-x-full hidden'}
       `}>

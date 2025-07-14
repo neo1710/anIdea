@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit"
-import conversationReducer from "./slices/conversationReducer"
+import productSlice from "./slices/conversationReducer"
 
 export const store = configureStore({
     reducer: {
-        conversation: conversationReducer,
+        products: productSlice,
     },
-  })
+})
+export type RootState = ReturnType<typeof store.getState>;
