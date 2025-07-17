@@ -263,7 +263,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange }) => {
         </div>
 
         {/* Apply Button */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-pink-50 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-6">
           <button
             onClick={applyFilters}
             className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:from-pink-600 hover:to-rose-600 transform hover:scale-[1.02] transition-all duration-300"
