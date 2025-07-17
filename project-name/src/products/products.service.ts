@@ -8,7 +8,9 @@ export interface Product {
   id?: string;
   name: string;
   price: number;
+  type: string;
   description?: string;
+  createdAt?: Date; // add createdAt property
 }
 
 @Injectable()
@@ -27,6 +29,7 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     const createdProduct = new this.productModel(createProductDto);
+    console.log('Creating product:', createdProduct, createProductDto);
     return createdProduct.save();
   }
 
