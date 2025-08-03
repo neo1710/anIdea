@@ -4,13 +4,21 @@ import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
+export interface SpecialOffer {
+  desc: string;
+  validUntil: Date;
+}
+
 export interface Product {
   id?: string;
   name: string;
+  image: string;
   price: number;
   type: string;
   description?: string;
-  createdAt?: Date; // add createdAt property
+  createdAt?: Date;
+  off?: number;
+  specialOffer?: SpecialOffer;
 }
 
 @Injectable()
