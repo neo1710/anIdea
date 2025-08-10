@@ -6,6 +6,7 @@ interface Product {
   name: string;
   price: number;
   type: string;
+  image: File[];  // Keep as is
   description: string;
   off?: number;
   specialOffer?: {
@@ -24,6 +25,7 @@ const ProductAdminPage: React.FC = () => {
     name: '',
     price: 0,
     type: '',
+    image: [],
     description: '',
     off: 0,
     specialOffer: {
@@ -72,40 +74,109 @@ const ProductAdminPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    
-    if (!validateForm()) return;
-    
-    setLoading(true);
-    setResponse(null);
-    
-    try {
-      // Dummy API call - replace with your actual endpoint
-      const response = await fetch('/api/products', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      // Validate file types and sizes
+      const validFiles = Array.from(files).filter(file => {
+        const isValid = file.type.startsWith('image/');
+        const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
+        return isValid && isValidSize;
       });
-      
-      // Simulate API response for demo
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setResponse({
-        success: Math.random() > 0.2, // 80% success rate for demo
-        message: Math.random() > 0.2 ? 'Product updated successfully!' : 'Failed to update product. Please try again.'
-      });
-      
-    } catch (error) {
-      setResponse({
-        success: false,
-        message: 'Network error. Please check your connection.'
-      });
-    } finally {
-      setLoading(false);
+
+      setProduct(prev => ({
+        ...prev,
+        image: validFiles
+      }));
+
+      if (validFiles.length !== files.length) {
+        setErrors(prev => ({
+          ...prev,
+          image: 'Some files were rejected. Please ensure all files are images under 5MB.'
+        }));
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          image: undefined
+        }));
+      }
     }
   };
+
+const handleSubmit = async () => {
+  if (!validateForm()) return;
+  
+  setLoading(true);
+  setResponse(null);
+  
+  try {
+    const formData = new FormData();
+    
+    // Append all product data except images
+    formData.append('name', product.name);
+    formData.append('price', product.price.toString());
+    formData.append('type', product.type);
+    formData.append('description', product.description);
+    formData.append('off', product.off?.toString() || '0');
+    formData.append('specialOffer', JSON.stringify(product.specialOffer));
+
+    // Append each image file - REMOVE BACKTICKS
+    product.image.forEach((file, index) => {
+      formData.append('images', file); // Fixed: removed backticks
+    });
+
+    // Add debug logging
+    console.log('=== FormData Contents ===');
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    console.log('========================');
+
+    const response = await fetch('http://localhost:3002/products', {
+      method: 'POST',
+      body: formData,
+    });
+
+    // ✅ HANDLE THE REAL RESPONSE
+    if (response.ok) {
+      const result = await response.json();
+      setResponse({
+        success: true,
+        message: 'Product created successfully!'
+      });
+      
+      // Optional: Reset form after successful submission
+      setProduct({
+        name: '',
+        price: 0,
+        type: '',
+        image: [],
+        description: '',
+        off: 0,
+        specialOffer: {
+          desc: '',
+          validUntil: ''
+        }
+      });
+    } else {
+      const errorData = await response.json();
+      setResponse({
+        success: false,
+        message: errorData.message || 'Failed to create product'
+      });
+    }
+    
+  } catch (error) {
+    console.error('Network error:', error);
+    setResponse({
+      success: false,
+      message: 'Network error. Please check your connection.'
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen mt-16 p-4">
@@ -185,6 +256,69 @@ const ProductAdminPage: React.FC = () => {
                   placeholder="e.g., Electronics, Clothing"
                 />
                 {errors.type && <p className="text-red-500 text-sm">{errors.type}</p>}
+              </div>
+
+              {/* Image Upload */}
+              <div className="space-y-2 col-span-2">
+                <label htmlFor="image" className="block text-sm font-medium text-rose-700">
+                  Product Images
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="image"
+                    className={`w-full px-4 py-3 rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                      product.image.length > 0
+                        ? 'border-rose-400 bg-rose-50'
+                        : 'border-rose-200 hover:border-rose-400 bg-white'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <FiPackage className="w-6 h-6 mx-auto mb-2 text-rose-500" />
+                      <span className="text-sm text-rose-600">
+                        {product.image.length > 0
+                          ? `${product.image.length} file(s) selected`
+                          : 'Drop images here or click to upload'}
+                      </span>
+                      <p className="text-xs text-rose-400 mt-1">
+                        Supports: JPG, PNG, GIF (Max 5MB each)
+                      </p>
+                    </div>
+                  </label>
+                </div>
+                {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
+                {product.image.length > 0 && (
+                  <div className="flex gap-2 flex-wrap mt-2">
+                    {Array.from(product.image).map((file, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-20 h-20 object-cover rounded-lg border border-rose-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProduct(prev => ({
+                              ...prev,
+                              image: prev.image.filter((_, i) => i !== index)
+                            }));
+                          }}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Price */}

@@ -3,12 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
 import { ProductSchema } from './products.schema';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }])
   ],
   controllers: [ProductsController],
-  providers: [ProductsService],
+  providers: [ProductsService, CloudinaryService],
 })
 export class ProductsModule {}

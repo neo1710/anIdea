@@ -1,5 +1,6 @@
 import { IsString, IsNumber, IsOptional, IsDate, ValidateNested, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Prop } from '@nestjs/mongoose';
 
 export class SpecialOfferDto {
   @IsString()
@@ -14,8 +15,8 @@ export class CreateProductDto {
   @IsString()
   name: string;
 
-  @IsString()
-  image: string;
+  @Prop([String])
+  image: string[];
 
   @IsString()
   type: string;
